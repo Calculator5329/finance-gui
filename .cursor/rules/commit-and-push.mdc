@@ -1,0 +1,14 @@
+---
+description: Always commit and push after making code changes
+alwaysApply: true
+---
+
+# Commit and Push After Changes
+
+After completing any code changes in this project:
+
+1. **Stage** all modified, added, and deleted files (exclude build artifacts like `.firebase/`, `dist/`, `node_modules/`)
+2. **Commit** with a clear, descriptive message summarizing the changes
+3. **Push** to the remote repository
+
+Do not leave changes uncommitted at the end of a session. Treat commit-and-push as the final step of every change.
