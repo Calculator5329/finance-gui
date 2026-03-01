@@ -11,6 +11,7 @@ import type { OnboardingStore } from './stores/OnboardingStore';
 
 const IS_DEMO = import.meta.env.VITE_DEMO_MODE === 'true';
 
+
 // Expose rootStore for testing/debugging
 if (typeof window !== 'undefined') {
   (window as any).__rootStore = rootStore;
