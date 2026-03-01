@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "master-site-92392"
+  },
+  "targets": {
+    "master-site-92392": {
+      "hosting": {
+        "finance-gui": [
+          "finance-gui-d5ea8"
+        ]
+      }
+    }
+  }
+}
