@@ -13,8 +13,7 @@ export type FinanceNodeType =
   | 'w2TaxNode'
   | 'grossPayNode'
   | 'expensesNode'
-  | 'variableNode'
-  | 'chartNode';
+  | 'variableNode';
 
 /** Data payload for AccountNode */
 export interface AccountNodeData {
@@ -75,19 +74,6 @@ export interface VariableNodeData {
   step: number;
 }
 
-/** Chart display mode */
-export type ChartDisplayMode = 'area' | 'line' | 'stacked';
-
-/** Data payload for ChartNode */
-export interface ChartNodeData {
-  label: string;
-  displayMode: ChartDisplayMode;
-  showNominal: boolean;
-  showReal: boolean;
-  showGoalLine: boolean;
-  showAccounts: boolean;
-}
-
 /** Data payload for W2TaxNode (working years income tax) */
 export interface W2TaxNodeData {
   label: string;
@@ -114,8 +100,7 @@ export type FinanceNodeData =
   | W2TaxNodeData
   | GrossPayNodeData
   | ExpensesNodeData
-  | VariableNodeData
-  | ChartNodeData;
+  | VariableNodeData;
 
 /** Node palette item (for sidebar drag) */
 export interface NodePaletteItem {

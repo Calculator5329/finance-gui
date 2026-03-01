@@ -13,7 +13,6 @@ import {
   Banknote,
   Receipt,
   SlidersHorizontal,
-  BarChart3,
   ShieldCheck,
 } from 'lucide-react';
 import type { FinanceNodeType } from '../../core/types/node';
@@ -108,7 +107,6 @@ const PALETTE: PaletteCategory[] = [
       { type: 'outputNode', label: 'Goal Status', icon: Target, color: '#22c55e', defaultData: { metric: 'goal_status' } },
       { type: 'outputNode', label: 'Gross Monthly', icon: Banknote, color: '#f59e0b', defaultData: { metric: 'monthly_income' } },
       { type: 'outputNode', label: 'Net Monthly', icon: ShieldCheck, color: '#22c55e', defaultData: { metric: 'net_monthly_income' } },
-      { type: 'chartNode', label: 'Projection Chart', icon: BarChart3, color: '#22d3ee' },
     ],
   },
 ];

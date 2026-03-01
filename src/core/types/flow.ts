@@ -10,7 +10,6 @@ import type {
   GrossPayNodeData,
   ExpensesNodeData,
   VariableNodeData,
-  ChartNodeData,
 } from './node';
 import type { Account } from './account';
 import type { RetirementGoal } from './goal';
@@ -27,7 +26,6 @@ export type W2TaxFlowNode = Node<W2TaxNodeData, 'w2TaxNode'>;
 export type GrossPayFlowNode = Node<GrossPayNodeData, 'grossPayNode'>;
 export type ExpensesFlowNode = Node<ExpensesNodeData, 'expensesNode'>;
 export type VariableFlowNode = Node<VariableNodeData, 'variableNode'>;
-export type ChartFlowNode = Node<ChartNodeData, 'chartNode'>;
 
 /** Union of all custom flow nodes */
 export type FinanceFlowNode =
@@ -40,8 +38,7 @@ export type FinanceFlowNode =
   | W2TaxFlowNode
   | GrossPayFlowNode
   | ExpensesFlowNode
-  | VariableFlowNode
-  | ChartFlowNode;
+  | VariableFlowNode;
 
 /** Custom edge with optional animation flag */
 export interface FinanceFlowEdge extends Edge {

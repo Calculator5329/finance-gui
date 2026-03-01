@@ -99,7 +99,6 @@ docs/                  # Project documentation
 | grossPayNode  | Gross annual income display          | label                        | Yes     |
 | expensesNode  | Monthly expenses display             | label                        | Yes     |
 | variableNode  | Tunable planning variable w/ slider  | key, value, min/max/step, suffix | Yes |
-| chartNode     | Multi-series projection chart        | displayMode, showNominal/Real/GoalLine/Accounts | Yes |
 | incomeNode    | Income source with SS auto-estimate  | sourceType, monthlyAmount, autoEstimate | Hidden  |
 | goalNode      | Display/edit goal parameters         | goalId, label                | Hidden  |
 | taxNode       | Tax breakdown with income allocation | filingStatus, stateRate      | Hidden  |
@@ -115,12 +114,12 @@ Edges are currently decorative (they visualize the conceptual data flow but do n
 | grossPayNode   | w2TaxNode, engineNode                    |
 | w2TaxNode      | outputNode, expensesNode                 |
 | expensesNode   | outputNode, engineNode                   |
-| outputNode     | outputNode, accountNode, taxNode, chartNode |
+| outputNode     | outputNode, accountNode, taxNode |
 | accountNode    | engineNode                               |
 | incomeNode     | engineNode                               |
 | goalNode       | engineNode                               |
 | variableNode   | engineNode                               |
-| engineNode     | outputNode, chartNode                    |
+| engineNode     | outputNode                              |
 | taxNode        | outputNode                               |
 
 Self-connections and duplicate edges are also blocked.
@@ -130,6 +129,7 @@ Self-connections and duplicate edges are also blocked.
 ## Services
 
 ### financialCalc.ts
+- `getNominalReturn(inflationRate)` - Nominal return = 7% + inflation (real ≈ 7%)
 - `calcFutureValue()` - Compound interest with monthly contributions
 - `calcNetWorth()` - Sum of vested account balances
 - `calcGoalProgress()` - Projected vs target, returns percent + status *(note: `GoalStore.progress` uses its own income-based logic inline; this function is not currently called)*

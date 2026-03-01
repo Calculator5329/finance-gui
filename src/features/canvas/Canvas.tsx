@@ -20,7 +20,6 @@ import { W2TaxNode } from './nodes/W2TaxNode';
 import { GrossPayNode } from './nodes/GrossPayNode';
 import { ExpensesNode } from './nodes/ExpensesNode';
 import { VariableNode } from './nodes/VariableNode';
-import { ChartNode } from './nodes/ChartNode';
 import { GlowEdge } from './edges/GlowEdge';
 import type { FinanceFlowNode } from '../../core/types/flow';
 import type { FinanceNodeType } from '../../core/types/node';
@@ -39,7 +38,6 @@ const nodeTypes = {
   grossPayNode: GrossPayNode,
   expensesNode: ExpensesNode,
   variableNode: VariableNode,
-  chartNode: ChartNode,
 };
 
 const edgeTypes = {
@@ -63,7 +61,6 @@ const DEFAULT_NODE_DATA: Record<FinanceNodeType, Record<string, unknown>> = {
   grossPayNode: { label: 'Gross Pay' },
   expensesNode: { label: 'Expenses' },
   variableNode: { label: 'Inflation Rate', key: 'inflationRate', value: 3, suffix: '%', min: 0, max: 10, step: 0.1 },
-  chartNode: { label: 'Projection Chart', displayMode: 'area', showNominal: true, showReal: true, showGoalLine: true, showAccounts: false },
 };
 
 /** Source type label mapping for income nodes */

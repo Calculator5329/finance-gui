@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import type { RetirementGoal, GoalStatus } from '../core/types/goal';
-import { calcFutureValue, calcMonthlyRetirementIncome, adjustForInflation, calcNetWorth, calcRequiredSavingsForSpending, resolveAccountContributions } from '../services/financialCalc';
+import { calcFutureValue, calcMonthlyRetirementIncome, adjustForInflation, calcNetWorth, calcRequiredSavingsForSpending, getNominalReturn, resolveAccountContributions } from '../services/financialCalc';
 import { calcYearByYearProjection, type YearProjection } from '../services/projectionCalc';
 import type { FilingStatus } from '../core/types/tax';
 import { calcW2Tax, calcRetirementTax, type W2TaxBreakdown, type IncomeAllocation } from '../services/taxCalc';
@@ -169,9 +169,10 @@ export class GoalStore {
     const years = this.yearsToRetirement;
     if (years <= 0) return this.accountStore.netWorth;
     const contributions = this.monthlyContributions;
+    const nominalReturn = getNominalReturn(this.inflationRate);
     return this.accountStore.accounts.reduce((total, account) => {
       const vestedBalance = account.balance * (account.vestingPercent / 100);
-      return total + calcFutureValue(vestedBalance, account.annualReturn, years, contributions[account.id] ?? 0);
+      return total + calcFutureValue(vestedBalance, nominalReturn, years, contributions[account.id] ?? 0);
     }, 0);
   }
 
@@ -383,13 +384,8 @@ export class GoalStore {
     const years = this.yearsToRetirement;
     if (years <= 0) return 0;
 
-    const accounts = this.accountStore.accounts;
-    const totalPct = accounts.reduce((sum, a) => sum + (a.contributionPercent ?? 0), 0);
-    const blendedReturn = totalPct > 0
-      ? accounts.reduce((sum, a) => sum + a.annualReturn * ((a.contributionPercent ?? 0) / totalPct), 0)
-      : 0.07;
-
-    const monthlyRate = blendedReturn / 12;
+    const nominalReturn = getNominalReturn(this.inflationRate);
+    const monthlyRate = nominalReturn / 12;
     const months = years * 12;
 
     if (monthlyRate <= 0) return portfolioGap / months;
@@ -430,12 +426,8 @@ export class GoalStore {
   /** Marginal value of saving $100 more per month until retirement */
   get savingsImpactPer100(): number {
     if (this.yearsToRetirement <= 0) return 0;
-    const accounts = this.accountStore.accounts;
-    const totalPct = accounts.reduce((sum, a) => sum + (a.contributionPercent ?? 0), 0);
-    const blendedReturn = totalPct > 0
-      ? accounts.reduce((sum, a) => sum + a.annualReturn * ((a.contributionPercent ?? 0) / totalPct), 0)
-      : 0.07;
-    const monthlyRate = blendedReturn / 12;
+    const nominalReturn = getNominalReturn(this.inflationRate);
+    const monthlyRate = nominalReturn / 12;
     const months = this.yearsToRetirement * 12;
     if (monthlyRate <= 0) return 100 * months;
     return 100 * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
@@ -446,10 +438,11 @@ export class GoalStore {
     const totalYears = Math.max(0, targetAge - this.goal.currentAge);
     const accounts = this.accountStore.accounts;
     const contributions = resolveAccountContributions(accounts, this.monthlySavings);
+    const nominalReturn = getNominalReturn(this.inflationRate);
 
     const projected = accounts.reduce((total, account) => {
       const vestedBalance = account.balance * (account.vestingPercent / 100);
-      return total + calcFutureValue(vestedBalance, account.annualReturn, totalYears, contributions[account.id] ?? 0);
+      return total + calcFutureValue(vestedBalance, nominalReturn, totalYears, contributions[account.id] ?? 0);
     }, 0);
 
     const gapYears = Math.max(0, this.ssClaimAge - targetAge);

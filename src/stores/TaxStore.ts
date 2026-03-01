@@ -5,7 +5,7 @@ import { save, load } from '../services/persistence';
 import type { GoalStore } from './GoalStore';
 import type { AccountStore } from './AccountStore';
 import type { AccountType } from '../core/types/account';
-import { calcFutureValue } from '../services/financialCalc';
+import { calcFutureValue, getNominalReturn } from '../services/financialCalc';
 
 const STORAGE_KEY = 'tax';
 
@@ -97,6 +97,7 @@ export class TaxStore {
   get autoAllocation(): IncomeAllocation {
     const years = this.goalStore.yearsToRetirement;
     const contributions = this.goalStore.monthlyContributions;
+    const nominalReturn = getNominalReturn(this.goalStore.inflationRate);
     let ordinary = 0;
     let ltcg = 0;
     let taxFree = 0;
@@ -106,7 +107,7 @@ export class TaxStore {
       const monthlyContrib = contributions[account.id] ?? 0;
       const projected = calcFutureValue(
         vestedBalance,
-        account.annualReturn,
+        nominalReturn,
         years,
         monthlyContrib,
       );

@@ -1,5 +1,23 @@
 # Finance GUI - Changelog
 
+## Session 26 - Projection Chart Removed & Nominal Return Formula (Feb 28, 2026)
+
+### Completed
+
+**Nominal annual return = 7% + inflation rate**
+- All projection calculations now use `getNominalReturn(inflationRate)` = 7% + inflation (real return ≈ 7%).
+- Updated: `projectionCalc`, `GoalStore` (projectedAmountAtRetirement, additionalMonthlySavingsNeeded, savingsImpactPer100, projectForTargetAge), `TaxStore` (autoAllocation), `financialCalc.calcGoalProgress`.
+- AccountEditor and AccountNode display the derived nominal return (read-only); per-account annualReturn is no longer used for projections (kept in Account type for persistence).
+
+**Projection Chart node removed**
+- Removed `chartNode` (Projection Chart) from the node palette, canvas, and default flow.
+- Deleted `ChartNode.tsx` and `ChartEditor.tsx`.
+- Removed `chartNode` from `FinanceNodeType`, `ChartNodeData`, `ChartFlowNode` types.
+- Updated `FlowStore` connection allowlist and added migration to strip persisted chart nodes/edges on load.
+- Updated `docs/tech_spec.md` to remove chart node from node types and connection contract.
+
+---
+
 ## Session 25 - Architecture Hardening (Feb 18, 2026)
 
 ### Completed

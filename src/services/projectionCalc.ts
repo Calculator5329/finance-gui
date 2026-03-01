@@ -1,6 +1,6 @@
 import type { Account } from '../core/types/account';
 import type { RetirementGoal } from '../core/types/goal';
-import { calcFutureValue, resolveAccountContributions } from './financialCalc';
+import { calcFutureValue, getNominalReturn, resolveAccountContributions } from './financialCalc';
 
 export interface YearProjection {
   year: number;
@@ -55,12 +55,13 @@ export function calcYearByYearProjection(
     let totalNominal = 0;
     let cumulativeContributions = 0;
 
+    const nominalReturn = getNominalReturn(inflationRate);
     for (const account of accounts) {
       const vestedBalance = account.balance * (account.vestingPercent / 100);
       const monthlyContrib = accountContributions[account.id] ?? 0;
       const projected = calcFutureValue(
         vestedBalance,
-        account.annualReturn,
+        nominalReturn,
         y,
         monthlyContrib,
       );

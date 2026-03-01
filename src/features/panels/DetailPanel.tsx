@@ -10,7 +10,6 @@ import { W2TaxEditor } from './W2TaxEditor';
 import { GrossPayEditor } from './GrossPayEditor';
 import { ExpensesEditor } from './ExpensesEditor';
 import { EngineEditor } from './EngineEditor';
-import { ChartEditor } from './ChartEditor';
 import { IncomeEditor } from './IncomeEditor';
 import { VariableEditor } from './VariableEditor';
 
@@ -107,8 +106,6 @@ export const DetailPanel = observer(function DetailPanel() {
         return <GoalEditor />;
       case 'taxNode':
         return <TaxEditor />;
-      case 'chartNode':
-        return <ChartEditor />;
       case 'incomeNode':
         return <IncomeEditor />;
       case 'variableNode': {

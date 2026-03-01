@@ -7,7 +7,7 @@ import type { AccountType } from '../../../core/types/account';
 import { ACCOUNT_TYPE_COLORS, ACCOUNT_TYPE_LABELS } from '../../../core/types/account';
 import { useAccountStore, useGoalStore } from '../../../stores/RootStore';
 import { ProgressBar } from '../../../components/ProgressBar';
-import { formatCurrency, calcRealReturn } from '../../../services/financialCalc';
+import { formatCurrency, calcRealReturn, getNominalReturn } from '../../../services/financialCalc';
 
 const ACCOUNT_ICONS: Record<AccountType, React.ElementType> = {
   '401k': Briefcase,
@@ -68,11 +68,11 @@ const AccountNodeInner = observer(function AccountNodeInner({ data }: { data: Ac
         </div>
       )}
 
-      {/* Return / Yield */}
+      {/* Return / Yield — nominal = 7% + inflation */}
       <div className="text-[10px] text-zinc-500 tabular-nums mb-0.5">
         {isSavings
-          ? `${(account.annualReturn * 100).toFixed(1)}% APY`
-          : `${(calcRealReturn(account.annualReturn, goalStore.inflationRate) * 100).toFixed(1)}% real return`
+          ? `${(getNominalReturn(goalStore.inflationRate) * 100).toFixed(1)}% APY`
+          : `${(calcRealReturn(getNominalReturn(goalStore.inflationRate), goalStore.inflationRate) * 100).toFixed(1)}% real return`
         }
       </div>
 

@@ -4,7 +4,7 @@ import type { Account, AccountType } from '../../core/types/account';
 import { ACCOUNT_TYPE_LABELS, ACCOUNT_TYPE_COLORS } from '../../core/types/account';
 import { useAccountStore, useGoalStore } from '../../stores/RootStore';
 import { ProgressBar } from '../../components/ProgressBar';
-import { calcRealReturn, formatCurrency } from '../../services/financialCalc';
+import { calcRealReturn, formatCurrency, getNominalReturn } from '../../services/financialCalc';
 import { NumberInput } from '../../components/NumberInput';
 
 interface AccountEditorProps {
@@ -124,33 +124,18 @@ export const AccountEditor = observer(function AccountEditor({ accountId }: Acco
         </div>
       </div>
 
-      {/* Annual return / Savings Yield */}
-      <NumberInput
-        label={account.type === 'savings' ? 'Savings Yield (APY)' : 'Nominal Annual Return'}
-        value={Math.round(account.annualReturn * 100 * 10) / 10}
-        onChange={(v) => update({ annualReturn: v / 100 })}
-        suffix="%"
-        step={0.1}
-        min={0}
-        max={30}
-      />
-
-      {/* Real return (read-only, inflation-adjusted) — hide for savings */}
-      {account.type !== 'savings' && (
-        <>
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-md px-2.5 py-2 flex items-center justify-between">
-            <span className="text-[10px] text-zinc-500 uppercase tracking-wider">
-              Real Return (inflation adj.)
-            </span>
-            <span className="text-xs text-cyan-400 font-medium tabular-nums">
-              {(calcRealReturn(account.annualReturn, goalStore.inflationRate) * 100).toFixed(1)}%
-            </span>
-          </div>
-          <div className="text-[9px] text-zinc-600 -mt-2">
-            Nominal {(account.annualReturn * 100).toFixed(1)}% · Inflation {(goalStore.inflationRate * 100).toFixed(1)}%
-          </div>
-        </>
-      )}
+      {/* Nominal return = 7% + inflation (read-only) */}
+      <div className="bg-zinc-900/60 border border-zinc-800 rounded-md px-2.5 py-2 flex items-center justify-between">
+        <span className="text-[10px] text-zinc-500 uppercase tracking-wider">
+          Nominal Annual Return
+        </span>
+        <span className="text-xs text-cyan-400 font-medium tabular-nums">
+          {(getNominalReturn(goalStore.inflationRate) * 100).toFixed(1)}%
+        </span>
+      </div>
+      <div className="text-[9px] text-zinc-600 -mt-2">
+        7% real + {(goalStore.inflationRate * 100).toFixed(1)}% inflation
+      </div>
 
       {/* Max Balance Cap */}
       <NumberInput

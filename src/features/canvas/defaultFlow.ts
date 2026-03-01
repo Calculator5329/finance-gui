@@ -6,7 +6,6 @@ import type { FinanceFlowNode, FinanceFlowEdge } from '../../core/types/flow';
  *   Gross Pay -> W-2 Tax -> Take-Home ─┐
  *                                       ├─> Disposable -> [5 Accounts] -> Engine -> Outputs
  *                           Expenses  ─┘    SS Income ->
- *   Engine -> Chart (below)
  *   Target Age / Inflation (below engine) -> Engine
  *   Gross Income (retirement) -> Tax Calculator -> Net Income
  */
@@ -137,14 +136,6 @@ export const DEFAULT_NODES: FinanceFlowNode[] = [
     data: { label: 'Net Monthly Income', metric: 'net_monthly_income' },
   },
 
-  // ── Chart Node (below engine) ─────────────────────────────
-  {
-    id: 'node-chart',
-    type: 'chartNode',
-    position: { x: 1260, y: 560 },
-    data: { label: 'Projection Chart', displayMode: 'area', showNominal: true, showReal: true, showGoalLine: true, showAccounts: false },
-  },
-
   // ── Goal / Variable Nodes (bottom row) ────────────────────
   {
     id: 'node-targetage',
@@ -192,9 +183,6 @@ export const DEFAULT_EDGES: FinanceFlowEdge[] = [
   // ── Retirement: Gross -> Tax -> Net ───────────────────────
   { id: 'e-gross-tax', source: 'node-grossincome', target: 'node-tax',      type: 'glowEdge', animated: true },
   { id: 'e-tax-net',   source: 'node-tax',         target: 'node-netincome',type: 'glowEdge', animated: true },
-
-  // ── Engine -> Chart ───────────────────────────────────────
-  { id: 'e-eng-chart', source: 'node-engine', target: 'node-chart', type: 'glowEdge', animated: true },
 
   // ── Variables -> Engine ───────────────────────────────────
   { id: 'e-age-eng', source: 'node-targetage', target: 'node-engine', type: 'glowEdge', animated: true },
