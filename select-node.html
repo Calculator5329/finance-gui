@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Engine Node</title>
+</head>
+<body>
+    <h1>Select Engine Node</h1>
+    <button onclick="selectEngineNode()">Select Engine Node</button>
+    <pre id="output"></pre>
+    
+    <script>
+        function selectEngineNode() {
+            const output = document.getElementById('output');
+            try {
+                // Try to access the parent window/opener
+                const targetWindow = window.opener || window.parent;
+                if (targetWindow && targetWindow.__rootStore) {
+                    targetWindow.__rootStore.flowStore.selectNode('node-engine');
+                    output.textContent = 'Success! Engine node selected.';
+                } else {
+                    output.textContent = 'Error: Unable to access rootStore. Make sure the finance-gui app is running in the parent/opener window.';
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
