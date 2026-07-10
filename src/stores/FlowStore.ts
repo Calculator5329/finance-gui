@@ -22,12 +22,12 @@ const ALLOWED_CONNECTIONS: Record<string, Set<string>> = {
   grossPayNode: new Set(['w2TaxNode', 'engineNode']),
   w2TaxNode: new Set(['outputNode', 'expensesNode']),
   expensesNode: new Set(['outputNode', 'engineNode']),
-  outputNode: new Set(['outputNode', 'accountNode', 'taxNode']),
+  outputNode: new Set(['outputNode', 'accountNode', 'taxNode', 'chartNode']),
   accountNode: new Set(['engineNode']),
   incomeNode: new Set(['engineNode']),
   goalNode: new Set(['engineNode']),
   variableNode: new Set(['engineNode']),
-  engineNode: new Set(['outputNode']),
+  engineNode: new Set(['outputNode', 'chartNode']),
   taxNode: new Set(['outputNode']),
 };
 
@@ -42,12 +42,8 @@ export class FlowStore {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
 
-    const rawNodes = load<FinanceFlowNode[]>(NODES_KEY, []);
-    const rawEdges = load<FinanceFlowEdge[]>(EDGES_KEY, []);
-    // Migration: remove chart nodes (Projection Chart removed)
-    const chartIds = new Set(rawNodes.filter((n) => n.type === 'chartNode').map((n) => n.id));
-    this.nodes = rawNodes.filter((n) => n.type !== 'chartNode') as FinanceFlowNode[];
-    this.edges = rawEdges.filter((e) => !chartIds.has(e.source) && !chartIds.has(e.target));
+    this.nodes = load<FinanceFlowNode[]>(NODES_KEY, []);
+    this.edges = load<FinanceFlowEdge[]>(EDGES_KEY, []);
 
     // Persist on changes
     reaction(

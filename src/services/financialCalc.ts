@@ -49,7 +49,6 @@ export function calcGoalProgress(
   goal: RetirementGoal,
   accounts: Account[],
   targetAmount: number,
-  inflationRate: number = 0.03,
 ): { percent: number; status: GoalStatus; projectedAmount: number } {
   const yearsToRetirement = goal.targetAge - goal.currentAge;
 
@@ -65,10 +64,10 @@ export function calcGoalProgress(
     };
   }
 
-  const nominalReturn = getNominalReturn(inflationRate);
+  // Project each account forward
   const projectedAmount = accounts.reduce((total, account) => {
     const vestedBalance = account.balance * (account.vestingPercent / 100);
-    return total + calcFutureValue(vestedBalance, nominalReturn, yearsToRetirement, account.monthlyContribution);
+    return total + calcFutureValue(vestedBalance, account.annualReturn, yearsToRetirement, account.monthlyContribution);
   }, 0);
 
   const percent = Math.min((projectedAmount / targetAmount) * 100, 150);
@@ -166,13 +165,6 @@ export function adjustForInflation(
 ): number {
   if (inflationRate <= 0 || years <= 0) return futureValue;
   return futureValue / Math.pow(1 + inflationRate, years);
-}
-
-/** Nominal return = 7% real + inflation (Fisher approximation) */
-export const NOMINAL_RETURN_REAL_BASE = 0.07;
-
-export function getNominalReturn(inflationRate: number): number {
-  return NOMINAL_RETURN_REAL_BASE + inflationRate;
 }
 
 /**
