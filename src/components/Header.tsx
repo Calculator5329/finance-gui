@@ -2,6 +2,8 @@ import { observer } from 'mobx-react-lite';
 import { Menu, Workflow } from 'lucide-react';
 import { useAccountStore } from '../stores/RootStore';
 import { formatCurrency } from '../services/financialCalc';
+import { UndoRedoButtons } from './UndoRedoControls';
+import { useUndoRedoHotkeys } from './useUndoRedoHotkeys';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -9,6 +11,7 @@ interface HeaderProps {
 
 export const Header = observer(function Header({ onToggleSidebar }: HeaderProps) {
   const accountStore = useAccountStore();
+  useUndoRedoHotkeys();
 
   return (
     <header className="h-12 bg-zinc-900/80 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between px-4 shrink-0 z-50">
@@ -25,6 +28,8 @@ export const Header = observer(function Header({ onToggleSidebar }: HeaderProps)
             Financial Workflow Dashboard
           </h1>
         </div>
+        <div className="h-4 w-px bg-zinc-700" />
+        <UndoRedoButtons />
       </div>
 
       <div className="flex items-center gap-4">

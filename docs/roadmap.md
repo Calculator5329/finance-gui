@@ -166,7 +166,7 @@
 - [x] Import/export flows as JSON
 - [ ] PDF report generation
 - [ ] Goal & action automation nodes
-- [ ] Undo/redo history
+- [x] Undo/redo history
 - [ ] Dark/light theme toggle
 
 ## Developer Workflow Tooling
