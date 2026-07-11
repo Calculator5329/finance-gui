@@ -1,5 +1,17 @@
 # Finance GUI - Changelog
 
+## Session 26 - Undo/redo history (Jul 11, 2026)
+
+### Completed
+
+**Undo/redo history (roadmap Phase 3)**
+- Added `src/services/history.ts` — a pure, generic, bounded `HistoryStack<T>` (push / undo / redo / clear, cursor-based timeline, redo-branch truncation on a new action after undo, oldest-drop bound, and time-windowed coalescing of same-key pushes). No MobX/React/app deps, so it is unit-tested in isolation.
+- Added `src/services/history.test.ts` — 11 tests via Node's built-in test runner (`npm test` → `node --test`), covering push, undo, redo, branch truncation, bounds/limit clamping, and coalescing behaviour.
+- Wired a whole-app snapshot history into `RootStore`, following the existing SavedSetup snapshot/restore pattern: a MobX `reaction` records canonical state (nodes, edges, accounts, goal + goal/tax settings) into the stack, with a signature guard so applying an undo/redo is not re-recorded (which would corrupt the timeline). `undo()`/`redo()` restore via the same store calls as `loadSetup`; observable `canUndo`/`canRedo` flags drive the UI. Node selection is normalized out so it is not undoable.
+- Added `src/components/UndoRedoControls.tsx` (toolbar buttons) and `src/components/useUndoRedoHotkeys.ts` (Ctrl/Cmd+Z undo, Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y redo; ignored while a text field is focused). Mounted in `Header`.
+
+> Note: the repo is mid `de-Firebase restructure` (prior WIP commit) with `src/features/*` and `src/core/types/*` still missing, so `npm run build` and repo-wide `npm run lint` fail on pre-existing dangling imports unrelated to this change. The new files themselves type-check and lint clean.
+
 ## Session 25 - Architecture Hardening (Feb 18, 2026)
 
 ### Completed
