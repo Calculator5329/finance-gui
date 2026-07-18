@@ -1,5 +1,9 @@
 # Finance GUI
 
+**Live app → [finance-gui-d5ea8.web.app](https://finance-gui-d5ea8.web.app)**
+
+![finance-gui screenshot](docs/screenshots/app.png)
+
 A node-based retirement planning tool. Build a visual pipeline of your income, accounts, and spending to project your path to financial independence.
 
 ## Stack
